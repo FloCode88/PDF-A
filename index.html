@@ -1394,16 +1394,16 @@ const PDFA = (() => {
     try {
       if (p.method === 'strip') {
         const r = await PDFA.stripPdfa(e.bytes, { removeIntent: state.removeIntent });
-        e.result = { bytes: r.bytes, name: `${b}_ohne-PDFA.pdf`, label: r.changed ? 'Normales PDF' : 'Keine Änderung nötig' };
+        e.result = { bytes: r.bytes, name: e.name, label: r.changed ? 'Normales PDF' : 'Keine Änderung nötig' };
       } else if (p.method === 'struct') {
         const r = await PDFA.convertStructure(e.bytes, state.level, b);
-        e.result = { bytes: r.bytes, name: `${b}_PDFA-${state.level}b.pdf`, label: `PDF/A-${state.level}b`, warn: r.verdict.block };
+        e.result = { bytes: r.bytes, name: e.name, label: `PDF/A-${state.level}b`, warn: r.verdict.block };
       } else {
         const r = await PDFA.convertRaster(e.bytes, state.level, b, {
           dpi: state.dpi, quality: state.quality,
           onPage: (i, n) => { e.progress = i / n; e.progressText = `Seite ${i} von ${n}`; render(); },
         });
-        e.result = { bytes: r.bytes, name: `${b}_PDFA-${state.level}b.pdf`, label: `PDF/A-${state.level}b`, dpi: r.dpi };
+        e.result = { bytes: r.bytes, name: e.name, label: `PDF/A-${state.level}b`, dpi: r.dpi };
       }
       e.status = 'done';
     } catch (err) {
